@@ -1,7 +1,17 @@
 const express =  require ('express')
-
 const app = express ()
+const bodyParser = require('body-parser')
 
+app.use(bodyParser.json())
+
+// get week:
+
+app.get('/week', (req,res) => {
+    res.send({
+        numberWeek: 2
+    })
+    
+})
 
 app.get('/activity',(req,res)=> {
 
@@ -11,6 +21,19 @@ app.get('/activity',(req,res)=> {
         repeat:" ",
         remind: "Напоминание"
     })
+})
+
+// Валидация
+
+const authMiddleware = (req,res,done) => {
+    
+}
+
+// put - обновление активностей
+app.put('/activity',(req,res) => {
+
+ 
+
 })
 
 app.listen(process.env.PORT || 3000)
