@@ -10,3 +10,16 @@ const activitySchema = new Schema({
 });
 
 
+const weekSchema = new Schema({
+    week:{ 
+    type: array, 
+    min: 1,
+    max: 52
+    
+}
+});
+
+
+module.exports = activitySchema
+
+module.exports = weekSchema
