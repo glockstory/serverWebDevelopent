@@ -76,11 +76,13 @@ app.get('/:day', async (req, res)=>{
 })
 
 //DELETE /:id - Удаление активности
-app.delete('/activity/:id',  (req,res)=>{
-    const id = req.params.id
-    activityModel.findByIdAndDelete(id, function(err,result){
-
-    })
+app.delete('/activity/:id', (req,res) => {
+    const Id  = req.params.id
+    activityModel.deleteOne(Id, function (err) {
+        if (err) return handleError(err);
+        res.status(200)
+        // deleted at most one tank document
+      });
 })
 
 app.listen(process.env.PORT || 3000)
