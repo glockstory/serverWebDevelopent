@@ -64,16 +64,24 @@ app.put('/activities/:id',(req,res) => {
 
 //GET /:day - Получение списка активностей текущего дня. Передаем все данные активностей
 app.get('/:day', async (req, res)=>{
-    const id = req.params.id
+    // const id = req.params.id
 
-    const day = await dayModel.findOne({
-        _id: ObjectID(id)
-    })
-    if(day){
-        res.status(200).send(day)
-    } else{
-        res.status(404).send('Day not found')
-    }
+    // const day = await activityModel.findOne({
+    //     _id: new ObjectID(id)
+    // })
+    // if(day){
+    //     res.status(200).send(day)
+    // } else{
+    //     res.status(404).send('Day not found')
+    // }
 })
 
 app.listen(process.env.PORT || 3000)
+
+app.delete('/activity/:id', (req,res) => {
+    const id  = req.params.id
+    activityModel.findByIdAndDelete(id, function (err) {
+        if (err) return console.log(err);
+        res.status(200).send('Activity deleted')
+      });
+})
