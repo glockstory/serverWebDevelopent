@@ -1,3 +1,4 @@
+const { ObjectID } = require('mongodb');
 const mongoose = require('mongoose')
 const { Schema } = mongoose
 
@@ -12,11 +13,7 @@ const activitySchema = new Schema({
 const daySchema = new Schema({
     name: String,
     date: String,
-    activities:
-    {
-
-    }
-    
+    activities: [{type: Schema.Types.ObjectId, ref:'activity'}]
 })
 
 

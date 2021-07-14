@@ -3,6 +3,7 @@ const app = express ()
 const bodyParser = require('body-parser')
 require('./mongodb')
 const activityModel = require('./models')
+const dayModel = require('./models')
 const { ObjectID } = require('mongodb')
 app.use(bodyParser.json())
 
@@ -58,6 +59,20 @@ app.put('/activities/:id',(req,res) => {
             remind
         })
         res.status(200).send('Activity is added')
+    }
+})
+
+//GET /:day - Получение списка активностей текущего дня. Передаем все данные активностей
+app.get('/:day', async (req, res)=>{
+    const id = req.params.id
+
+    const day = await dayModel.findOne({
+        _id: ObjectID(id)
+    })
+    if(day){
+        res.status(200).send(day)
+    } else{
+        res.status(404).send('Day not found')
     }
 })
 
