@@ -20,9 +20,18 @@ app.get('/activities', async (req, res)=> {
     res.send(activities)
 })
 
-app.get('/activity/:id', (req, res)=>{
+app.get('/activity/:id', async (req, res)=>{
     const id = req.params.id
 
+    const activity = await activityModel.findOne({
+        _id: id
+    })
+
+    if (activity){
+        res.send(activity)
+    } else {
+        res.status(404).send('Activity not found')
+    }
 
 })
 
@@ -34,9 +43,20 @@ const authMiddleware = (req,res,done) => {
 
 // put - обновление активностей
 app.put('/activity',(req,res) => {
+    const {name, time, pictogram, repeat, remind} = req.body
 
- 
-
+    if(!name || !time || !pictogram){
+        res.status(500).send('Name or time or pictogram is empty')
+    } else {
+        activityModel.save({
+            name,
+            time,
+            pictogram,
+            repeat,
+            remind
+        })
+        res.send('Activity is added')
+    }
 })
 
 app.listen(process.env.PORT || 3000)
