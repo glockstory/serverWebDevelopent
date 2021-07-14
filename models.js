@@ -3,6 +3,7 @@ const mongoose = require('mongoose')
 const { Schema } = mongoose
 
 const activitySchema = new Schema({
+    // 2021:06:03:18:15
     name:  String,
     time: {start: String, end: String},
     pictogram: String,

@@ -44,7 +44,7 @@ const authMiddleware = (req,res,done) => {
 }
 
 // put = обновление активностей (исправить)
-app.put('/activities/:id',(req,res) => {
+app.post('/activities/:id',(req,res) => {
     const {name, time, pictogram, repeat, remind} = req.body
     console.log(name, time, pictogram)
     if(!name || !time || !pictogram){
@@ -75,13 +75,26 @@ app.get('/:day', async (req, res)=>{
     // }
 })
 
-app.listen(process.env.PORT || 3000)
-
+// DELETE /:id - Удаление активности
 app.delete('/activity/:id', (req,res) => {
     const id  = req.params.id
     activityModel.findByIdAndDelete(id, function (err) {
         if (err) return console.log(err);
         res.status(200).send('Activity deleted')
+      });
+})
+
+// PUT /:id - Обновление активности
+app.put('/activity/:id', (req,res) => {
+    const newName = req.body.name
+    const newTime = req.body.time
+    const newPictogram = req.body.pictogram
+    const newRepeat = req.body.repeat
+    const newRemind = req.body.remind
+    const id  = req.params.id
+    activityModel.findByIdAndUpdate(id,{name:newName,time:newTime,pictogram:newPictogram,repeat:newRepeat,remind:newRemind}, function (err) {
+        if (err) return console.log(err);
+        res.status(200).send('Activity is updated')
       });
 })
 
