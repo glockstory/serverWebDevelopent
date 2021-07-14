@@ -1,7 +1,8 @@
 const express =  require ('express')
 const app = express ()
 const bodyParser = require('body-parser')
-
+require('./mongodb')
+const activityModel = require('./models')
 app.use(bodyParser.json())
 
 // get week:
@@ -13,14 +14,16 @@ app.get('/week', (req,res) => {
     
 })
 
-app.get('/activity',(req,res)=> {
+// поиск всех активностей
+app.get('/activities', async (req, res)=> {
+    const activities = await activityModel.find({})
+    res.send(activities)
+})
 
-    res.send({
-        name: "Misha",
-        pictogram: "http://что-то там/",
-        repeat:" ",
-        remind: "Напоминание"
-    })
+app.get('/activity/:id', (req, res)=>{
+    const id = req.params.id
+
+
 })
 
 // Валидация
