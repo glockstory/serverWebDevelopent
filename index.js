@@ -86,16 +86,12 @@ app.delete('/activity/:id', (req,res) => {
 
 // PUT /:id - Обновление активности
 app.put('/activity/:id', (req,res) => {
-    const newName = req.body.name
-    const newTime = req.body.time
-    const newPictogram = req.body.pictogram
-    const newRepeat = req.body.repeat
-    const newRemind = req.body.remind
+    const {name, time, pictogram, repeat, remind} = req.body
     const id  = req.params.id
-    activityModel.findByIdAndUpdate(id,{name:newName,time:newTime,pictogram:newPictogram,repeat:newRepeat,remind:newRemind}, function (err) {
+    activityModel.findByIdAndUpdate(id,{name,time,pictogram,repeat,remind}, function (err) {
         if (err) return console.log(err);
         res.status(200).send('Activity is updated')
       });
-})
 
+})
 app.listen(process.env.PORT || 3000)
