@@ -20,6 +20,6 @@ const weekSchema = new Schema({
 });
 
 
-module.exports = activitySchema
+module.exports = mongoose.model('activity', activitySchema)
 
-module.exports = weekSchema
+module.exports = mongoose.model('week', weekSchema)
