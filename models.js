@@ -3,7 +3,7 @@ const { Schema } = mongoose
 
 const activitySchema = new Schema({
     name:  String, // String is shorthand for {type: String}
-    time: { type: String, default: Date.now },
+    time: {start: String, end: String},
     pictogram: String,
     repeat: String,
     remind: String,
@@ -11,15 +11,15 @@ const activitySchema = new Schema({
 
 
 const weekSchema = new Schema({
-    week:{ 
-    type: array, 
-    min: 1,
-    max: 52
+    // week:{ 
+    // type: array, 
+    // min: 1,
+    // max: 52
     
-}
+// }
 });
 
 
 module.exports = mongoose.model('activity', activitySchema)
 
-module.exports = mongoose.model('week', weekSchema)
+// module.exports = mongoose.model('week', weekSchema)
