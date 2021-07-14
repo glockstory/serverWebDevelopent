@@ -48,7 +48,7 @@ app.put('/activity',(req,res) => {
     if(!name || !time || !pictogram){
         res.status(500).send('Name or time or pictogram is empty')
     } else {
-        activityModel.save({
+        activityModel.create({
             name,
             time,
             pictogram,
