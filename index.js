@@ -3,7 +3,6 @@ const app = express ()
 const bodyParser = require('body-parser')
 require('./mongodb')
 const activityModel = require('./models')
-const dayModel = require('./models')
 const { ObjectID } = require('mongodb')
 app.use(bodyParser.json())
 
@@ -13,7 +12,7 @@ app.get('/week', (req,res) => {
     res.send({
         numberWeek: 2
     })
-    
+
 })
 
 // поиск всех активностей
@@ -41,7 +40,7 @@ app.get('/activity/:id', async (req, res)=>{
 // Валидация
 
 const authMiddleware = (req,res,done) => {
-    
+
 }
 
 // put = обновление активностей (исправить)
@@ -85,3 +84,5 @@ app.delete('/activity/:id', (req,res) => {
         res.status(200).send('Activity deleted')
       });
 })
+
+app.listen(process.env.PORT || 3000)
