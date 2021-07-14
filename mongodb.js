@@ -1,9 +1,11 @@
 // getting-started.js
 const mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost:27017/test', {useNewUrlParser: true, useUnifiedTopology: true});
-
+mongoose.connect('mongodb+srv://root:root@realmcluster.vroin.mongodb.net/myFirstDatabase?retryWrites=true&w=majority', {useNewUrlParser: true, useUnifiedTopology: true});
+// mongodb+srv://Nikita:Dinkimom48@configurationmodule.yufbf.mongodb.net/myFirstDatabase?retryWrites=true&w=majority
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function() {
-  // we're connected!
+  console.log('we connected')
 });
+
+module.exports = db;
