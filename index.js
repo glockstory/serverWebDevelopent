@@ -21,6 +21,7 @@ app.get('/activities', async (req, res)=> {
     res.status(200).send(activities)
 })
 
+//GET /:id - Чтение активности. При запросе должен лететь весь набор полей записи
 app.get('/activity/:id', async (req, res)=>{
     const id = req.params.id
 
@@ -42,7 +43,7 @@ const authMiddleware = (req,res,done) => {
     
 }
 
-// put - обновление активностей
+// put = обновление активностей (исправить)
 app.put('/activities/:id',(req,res) => {
     const {name, time, pictogram, repeat, remind} = req.body
     console.log(name, time, pictogram)
@@ -56,7 +57,7 @@ app.put('/activities/:id',(req,res) => {
             repeat,
             remind
         })
-        res.send('Activity is added')
+        res.status(200).send('Activity is added')
     }
 })
 
