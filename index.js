@@ -3,7 +3,6 @@ const app = express ()
 const bodyParser = require('body-parser')
 require('./mongodb')
 const activityModel = require('./models')
-const dayModel = require('./models')
 const { ObjectID } = require('mongodb')
 app.use(bodyParser.json())
 
@@ -66,7 +65,7 @@ app.put('/activities/:id',(req,res) => {
 app.get('/:day', async (req, res)=>{
     const id = req.params.id
 
-    const day = await dayModel.findOne({
+    const day = await activityModel.findOne({
         _id: ObjectID(id)
     })
     if(day){
@@ -74,6 +73,14 @@ app.get('/:day', async (req, res)=>{
     } else{
         res.status(404).send('Day not found')
     }
+})
+
+//DELETE /:id - Удаление активности
+app.delete('/activity/:id',  (req,res)=>{
+    const id = req.params.id
+    activityModel.findByIdAndDelete(id, function(err,result){
+
+    })
 })
 
 app.listen(process.env.PORT || 3000)
