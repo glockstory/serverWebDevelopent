@@ -8,9 +8,7 @@ const activitySchema = new Schema({
     pictogram: String,
     repeat: String,
     remind: String,
+    date: String
 });
-
-
 module.exports = mongoose.model('activity', activitySchema)
-//module.exports = mongoose.model('day', daySchema)
-// module.exports = mongoose.model('week', weekSchema)
+
