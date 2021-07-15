@@ -1,155 +1,100 @@
-const express =  require ('express')
-const app = express ()
-const bodyParser = require('body-parser')
-require('./mongodb')
-const activityModel = require('./models')
-const { ObjectID } = require('mongodb')
-app.use(bodyParser.json())
-const moment = require('moment')
-// get week:
+const express = require('express');
+const app = express();
+const bodyParser = require('body-parser');
+require('./mongodb');
+const activityModel = require('./models');
+app.use(bodyParser.json());
+const moment = require('moment');
+const getWeek = require('./utils/getWeek');
+const DATE_FORMAT = require('./constants/DateFormat');
+
+// GET /week/:weekNumber/:year
 app.get('/week/:weekNumber/:year', async (req, res) => {
-    const { weekNumber, year } = req.params;
-    console.log(weekNumber, year)
-    const activities = await activityModel.find({});
-    
-    res.status(200).send(getWeek(activities, Number(weekNumber), Number(year)));
+  const { weekNumber, year } = req.params;
+  const activities = await activityModel.find();
+
+  res.status(200).send(getWeek(activities, Number(weekNumber), Number(year)));
+});
+
+// GET /:id - Чтение активности. При запросе должен лететь весь набор полей записи
+app.get('/activity/:id', async (req, res) => {
+  const id = req.params.id;
+  const activity = await activityModel.findOne({
+    _id: id,
+  });
+
+  if (activity) {
+    res.status(200).send(activity);
+  } else {
+    res.status(404).send('Activity not found');
+  }
+});
+
+// POST /activity - создание
+app.post('/activity', (req, res) => {
+  const { name, time, pictogram, repeat, remind, date } = req.body;
+
+  if (!name || !time || !date) {
+    res.status(500).send('Name or time or date or pictogram is empty');
+  } else {
+    activityModel.create({
+      name,
+      time: time.start + '-' + time.end,
+      pictogram,
+      repeat,
+      remind,
+      date,
     });
+    res.status(200).send('Activity is added');
+  }
+});
 
-// поиск всех активностей
-app.get('/activities', async (req, res)=> {
-    const activities = await activityModel.find({})
-    res.status(200).send(activities)
-})
+// GET /day/:date - Получение списка активностей текущего дня. Передаем все данные активностей
+app.get('/day/:date', async (req, res) => {
+  const { date } = req.params;
+  const week = moment(date, DATE_FORMAT).isoWeek();
+  const year = moment(date, DATE_FORMAT).year();
+  const activities = await activityModel.find();
 
-//GET /:id - Чтение активности. При запросе должен лететь весь набор полей записи
-app.get('/activity/:id', async (req, res)=>{
-    const id = req.params.id
+  const day = getWeek(activities, week, year).find(
+    (item) => item.date === date
+  );
 
-    const activity = await activityModel.findOne({
-        _id: id 
-    })
-
-    if (activity){
-        res.status(200).send(activity)
-    } else {
-        res.status(404).send('Activity not found')
-    }
-
-})
-
-// post - создание
-app.post('/activity/:id',(req,res) => {
-    const {name, time, pictogram, repeat, remind, date} = req.body
-    console.log(name, time, pictogram, date)
-    if(!name || !time || !date){
-        res.status(500).send('Name or time or date or pictogram is empty')
-    } else {
-        activityModel.create({
-            name,
-            time: time.start + '-' + time.end,
-            pictogram,
-            repeat,
-            remind,
-            date
-        })
-        res.status(200).send('Activity is added')
-    }
-})
-
-//GET /:day - Получение списка активностей текущего дня. Передаем все данные активностей
-app.get('/:day', async (req, res)=>{
-
-})
+  return res.status(200).send(day);
+});
 
 // DELETE /:id - Удаление активности
-app.delete('/activity/:id', (req,res) => {
-    const id  = req.params.id
-    activityModel.findByIdAndDelete(id, function (err) {
-        if (err) return console.log(err);
-        res.status(200).send('Activity deleted')
-      });
-})
+app.delete('/activity/:id', (req, res) => {
+  const id = req.params.id;
+
+  activityModel.findByIdAndDelete(id, function (err) {
+    if (err) return console.log(err);
+
+    res.status(200).send('Activity deleted');
+  });
+});
 
 // PUT /:id - Обновление активности
-app.put('/activity/:id', (req,res) => {
-    const {name, time, pictogram, repeat, remind, date} = req.body
-    const id  = req.params.id
-    activityModel.findByIdAndUpdate(id,{name,time: time.start + '-' + time.end,pictogram,repeat,remind, date}, function (err) {
-        if (err) return console.log(err);
-        res.status(200).send('Activity is updated')
-      });
+app.put('/activity/:id', (req, res) => {
+  const { name, time, pictogram, repeat, remind, date } = req.body;
+  const id = req.params.id;
 
-})
-app.listen(process.env.PORT || 3000)
+  activityModel.findByIdAndUpdate(
+    id,
+    {
+      name,
+      time: time.start + '-' + time.end,
+      pictogram,
+      repeat,
+      remind,
+      date,
+    },
+    function (err) {
+      if (err) return console.log(err);
 
-// Веселые вещи
-function getDateRangeFromWeek(weekNumber, year) {
-    const MONDAY = moment().day("Monday").year(year).week(weekNumber);
-    const DAYS = [MONDAY];
-  
-    for (let i = 1; i < 7; i++) {
-      const DAY = moment(MONDAY).add(i, "days");
-      DAYS.push(DAY);
+      res.status(200).send('Activity is updated');
     }
-  
-    return DAYS.map((day) => day.format("DD.MM.YYYY"));
-  }
-  
-  function getWeek(activities, weekNumber, year) {
-    const PERIODS = [
-      "9:00-10:00",
-      "10:00-11:00",
-      "11:00-12:00",
-      "12:00-13:00",
-      "13:00-14:00",
-      "14:00-15:00",
-      "15:00-16:00",
-      "16:00-17:00",
-      "17:00-18:00",
-      "18:00-19:00",
-      "19:00-20:00",
-      "20:00-21:00"
-    ];
-  
-    const DAYS = getDateRangeFromWeek(weekNumber, year);
-  
-    const WEEK = DAYS.map((day) => {
-      const DAY = {
-        date: day,
-        activities: {}
-      };
-  
-      for (let i = 0; i < PERIODS.length; i++) {
-        const PERIOD = PERIODS[i];
-        const [PERIOD_START] = PERIOD.split("-");
-  
-        const FOUND_ACTIVITY = activities.find(
-          (activity) =>
-            activity.date === DAY.date &&
-            activity.time.search(`${PERIOD_START}-`) !== -1
-        );
-  
-        if (FOUND_ACTIVITY) {
-          DAY.activities[FOUND_ACTIVITY.time] = FOUND_ACTIVITY;
-  
-          const PERIOD_END = FOUND_ACTIVITY.time.split("-")[1];
-  
-          const NEXT_PERIOD = PERIODS.find(
-            (period, index) => period.search(`${PERIOD_END}-`) !== -1
-          );
-  
-          if (NEXT_PERIOD) {
-            i = PERIODS.indexOf(NEXT_PERIOD) - 1;
-          } else {
-            i = PERIODS.length;
-          }
-        } else {
-          DAY.activities[PERIOD] = null;
-        }
-      }
-  
-      return DAY;
-    });
-  
-    return WEEK;
-  }
+  );
+});
+
+app.listen(process.env.PORT || 3000);
