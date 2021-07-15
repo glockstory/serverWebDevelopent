@@ -6,16 +6,14 @@ const activityModel = require('./models')
 const { ObjectID } = require('mongodb')
 app.use(bodyParser.json())
 const moment = require('moment')
-
 // get week:
-app.get('/:week', async (req,res) => {
-    const {week, year} = req.body
-    week = getDateRangeFromWeek(week, year)
-
-    const activities = await activityModel.find({})
-
-    res.status(200).send(getWeek(activities, week, year))
-})
+app.get('/week/:weekNumber/:year', async (req, res) => {
+    const { weekNumber, year } = req.body;
+    
+    const activities = await activityModel.find({});
+    
+    res.status(200).send(getWeek(activities, weekNumber, year));
+    });
 
 // поиск всех активностей
 app.get('/activities', async (req, res)=> {
