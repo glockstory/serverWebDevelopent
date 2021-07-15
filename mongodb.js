@@ -1,3 +1,4 @@
+
 // getting-started.js
 const mongoose = require('mongoose');
 mongoose.connect('mongodb+srv://root:root@realmcluster.vroin.mongodb.net/myFirstDatabase?retryWrites=true&w=majority', {useNewUrlParser: true, useUnifiedTopology: true});
