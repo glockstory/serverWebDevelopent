@@ -8,11 +8,11 @@ app.use(bodyParser.json())
 const moment = require('moment')
 // get week:
 app.get('/week/:weekNumber/:year', async (req, res) => {
-    const { weekNumber, year } = req.body;
-    
+    const { weekNumber, year } = req.params;
+    console.log(weekNumber, year)
     const activities = await activityModel.find({});
     
-    res.status(200).send(getWeek(activities, weekNumber, year));
+    res.status(200).send(getWeek(activities, Number(weekNumber), Number(year)));
     });
 
 // поиск всех активностей
@@ -26,7 +26,7 @@ app.get('/activity/:id', async (req, res)=>{
     const id = req.params.id
 
     const activity = await activityModel.findOne({
-        _id: new ObjectID(id)
+        _id: id 
     })
 
     if (activity){
@@ -37,16 +37,16 @@ app.get('/activity/:id', async (req, res)=>{
 
 })
 
-// put = обновление активностей (исправить)
-app.post('/activities/:id',(req,res) => {
+// post - создание
+app.post('/activity/:id',(req,res) => {
     const {name, time, pictogram, repeat, remind, date} = req.body
     console.log(name, time, pictogram, date)
-    if(!name || !time || !pictogram || !date){
+    if(!name || !time || !date){
         res.status(500).send('Name or time or date or pictogram is empty')
     } else {
         activityModel.create({
             name,
-            time,
+            time: time.start + '-' + time.end,
             pictogram,
             repeat,
             remind,
@@ -58,6 +58,7 @@ app.post('/activities/:id',(req,res) => {
 
 //GET /:day - Получение списка активностей текущего дня. Передаем все данные активностей
 app.get('/:day', async (req, res)=>{
+
 })
 
 // DELETE /:id - Удаление активности
@@ -73,7 +74,7 @@ app.delete('/activity/:id', (req,res) => {
 app.put('/activity/:id', (req,res) => {
     const {name, time, pictogram, repeat, remind, date} = req.body
     const id  = req.params.id
-    activityModel.findByIdAndUpdate(id,{name,time,pictogram,repeat,remind, date}, function (err) {
+    activityModel.findByIdAndUpdate(id,{name,time: time.start + '-' + time.end,pictogram,repeat,remind, date}, function (err) {
         if (err) return console.log(err);
         res.status(200).send('Activity is updated')
       });
