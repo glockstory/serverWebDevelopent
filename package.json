@@ -2,33 +2,34 @@
   "name": "programmer",
   "version": "1.0.0",
   "engines": {
-    "node": "14.x"
+  "node": "14.x"
   },
   "main": "index.js",
   "scripts": {
-    "start": "nodemon index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+  "start": "node index.js",
+  "start:dev": "nodemon index.js",
+  "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
   "keywords": [],
   "description": "Репозиторий в рамках проекта \"Учебная практика, 2 курс\"",
   "dependencies": {
-    "body-parser": "^1.19.0",
-    "express": "^4.17.1",
-    "moment": "^2.29.1",
-    "mongodb": "^4.0.0",
-    "mongoose": "^5.13.2",
-    "moongoose": "^0.0.4",
-    "nodemon": "^2.0.12"
+  "body-parser": "^1.19.0",
+  "express": "^4.17.1",
+  "moment": "^2.29.1",
+  "mongodb": "^4.0.0",
+  "mongoose": "^5.13.2",
+  "moongoose": "^0.0.4",
+  "nodemon": "^2.0.12"
   },
   "devDependencies": {},
   "repository": {
-    "type": "git",
-    "url": "git+https://github.com/glockstory/serverWebDevelopent.git"
+  "type": "git",
+  "url": "git+https://github.com/glockstory/serverWebDevelopent.git"
   },
   "bugs": {
-    "url": "https://github.com/glockstory/serverWebDevelopent/issues"
+  "url": "https://github.com/glockstory/serverWebDevelopent/issues"
   },
   "homepage": "https://github.com/glockstory/serverWebDevelopent#readme"
-}
+  }
