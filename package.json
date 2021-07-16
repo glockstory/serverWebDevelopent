@@ -1,6 +1,9 @@
 {
   "name": "programmer",
   "version": "1.0.0",
+  "engines": {
+    "node": "14.x"
+  },
   "main": "index.js",
   "scripts": {
     "start": "nodemon index.js",
@@ -9,7 +12,7 @@
   "author": "",
   "license": "ISC",
   "keywords": [],
-  "description": "",
+  "description": "Репозиторий в рамках проекта \"Учебная практика, 2 курс\"",
   "dependencies": {
     "body-parser": "^1.19.0",
     "express": "^4.17.1",
@@ -18,5 +21,14 @@
     "mongoose": "^5.13.2",
     "moongoose": "^0.0.4",
     "nodemon": "^2.0.12"
-  }
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/glockstory/serverWebDevelopent.git"
+  },
+  "bugs": {
+    "url": "https://github.com/glockstory/serverWebDevelopent/issues"
+  },
+  "homepage": "https://github.com/glockstory/serverWebDevelopent#readme"
 }
