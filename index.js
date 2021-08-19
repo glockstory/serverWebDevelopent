@@ -18,6 +18,8 @@ app.get('/week/:weekNumber/:year', async (req, res) => {
 
 // GET /:id - Чтение активности. При запросе должен лететь весь набор полей записи
 app.get('/activity/:id', async (req, res) => {
+  console.log(req, res)
+  
   const id = req.params.id;
   const activity = await activityModel.findOne({
     _id: id,
